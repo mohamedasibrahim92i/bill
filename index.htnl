@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Much Can You Save? | Solar Energy MY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-mesh {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(255, 170, 0, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(0, 200, 255, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255, 100, 0, 0.04) 0%, transparent 60%);
+            animation: meshMove 20s ease-in-out infinite;
+        }
+
+        @keyframes meshMove {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.05); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 24px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .logo-area {
+            text-align: center;
+            margin-bottom: 32px;
+            padding-top: 12px;
+        }
+
+        .logo-area img {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 0 30px rgba(255, 170, 0, 0.3);
+        }
+
+        .logo-area h1 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-area p {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        /* Hero Card */
+        .hero-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 28px 24px;
+            text-align: center;
+            margin-bottom: 24px;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 170, 0, 0.03), transparent);
+            animation: shimmer 6s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .hero-card h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-card .subtitle {
+            font-size: 0.9rem;
+            color: #aaa;
+            line-height: 1.5;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Slider Section */
+        .slider-section {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 24px;
+            padding: 28px 24px;
+            margin-bottom: 24px;
+        }
+
+        .slider-label {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .slider-label strong {
+            color: #ffaa00;
+            font-weight: 600;
+        }
+
+        .bill-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            gap: 12px;
+        }
+
+        .bill-box {
+            flex: 1;
+            text-align: center;
+            padding: 20px 12px;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .bill-box.current {
+            background: rgba(255, 80, 80, 0.08);
+            border: 1px solid rgba(255, 80, 80, 0.15);
+        }
+
+        .bill-box.solar {
+            background: rgba(0, 230, 150, 0.08);
+            border: 1px solid rgba(0, 230, 150, 0.15);
+        }
+
+        .bill-box .label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            opacity: 0.7;
+        }
+
+        .bill-box.current .label { color: #ff6666; }
+        .bill-box.solar .label { color: #00e696; }
+
+        .bill-box .amount {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .bill-box .unit {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .arrow-divider {
+            font-size: 1.5rem;
+            color: #444;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Range Slider */
+        .range-wrap {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: linear-gradient(to right, #ff4444, #ffaa00, #00e696);
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.4), 0 0 20px rgba(255, 170, 0, 0.4);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:active {
+            transform: scale(1.2);
+        }
+
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.65rem;
+            color: #555;
+            margin-top: 8px;
+        }
+
+        /* Savings Highlight */
+        .savings-highlight {
+            background: rgba(0, 230, 150, 0.06);
+            border: 1px solid rgba(0, 230, 150, 0.12);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .savings-highlight .save-label {
+            font-size: 0.75rem;
+            color: #00e696;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
+        }
+
+        .savings-highlight .save-amount {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #00e696;
+            text-shadow: 0 0 30px rgba(0, 230, 150, 0.3);
+        }
+
+        .savings-highlight .save-note {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 6px;
+        }
+
+        /* Info Cards */
+        .info-grid {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 170, 0, 0.2);
+            transform: translateX(4px);
+        }
+
+        .info-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .info-icon.sun { background: rgba(255, 170, 0, 0.1); }
+        .info-icon.money { background: rgba(0, 230, 150, 0.1); }
+        .info-icon.shield { background: rgba(100, 180, 255, 0.1); }
+        .info-icon.clock { background: rgba(200, 100, 255, 0.1); }
+
+        .info-text h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .info-text p {
+            font-size: 0.8rem;
+            color: #888;
+            line-height: 1.5;
+        }
+
+        /* CTA */
+        .cta-section {
+            text-align: center;
+            margin-top: auto;
+            padding-top: 24px;
+        }
+
+        .cta-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #ffaa00, #ff7700);
+            border: none;
+            border-radius: 16px;
+            color: #000;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(255, 170, 0, 0.3);
+            margin-bottom: 12px;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255, 170, 0, 0.4);
+        }
+
+        .cta-note {
+            font-size: 0.75rem;
+            color: #555;
+        }
+
+        .cta-note a {
+            color: #ffaa00;
+            text-decoration: none;
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            margin-top: 24px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .disclaimer p {
+            font-size: 0.7rem;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        /* Floating particles */
+        .particle {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 170, 0, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 520px;
+                padding: 40px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-mesh"></div>
+
+    <!-- Floating particles -->
+    <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="particle" style="left: 30%; animation-delay: 3s;"></div>
+    <div class="particle" style="left: 50%; animation-delay: 7s;"></div>
+    <div class="particle" style="left: 70%; animation-delay: 5s;"></div>
+    <div class="particle" style="left: 90%; animation-delay: 2s;"></div>
+
+    <div class="container">
+
+        <!-- Logo -->
+        <div class="logo-area">
+            <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #ffaa00, #ff7700); border-radius: 16px; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 0 30px rgba(255, 170, 0, 0.3);">☀️</div>
+            <h1>Solar Energy MY</h1>
+            <p>solarenergymy.com</p>
+        </div>
+
+        <!-- Hero -->
+        <div class="hero-card">
+            <h2>See Your Savings</h2>
+            <p class="subtitle">Malaysia gets 2,000+ hours of sun every year. Most of that energy hits your roof and leaves. Here's what happens if you catch it.</p>
+        </div>
+
+        <!-- Slider -->
+        <div class="slider-section">
+            <p class="slider-label">Drag to match your <strong>monthly TNB bill</strong></p>
+
+            <div class="bill-display">
+                <div class="bill-box current">
+                    <div class="label">Now</div>
+                    <div class="amount" id="currentBill">RM 400</div>
+                    <div class="unit">per month</div>
+                </div>
+                <div class="arrow-divider">→</div>
+                <div class="bill-box solar">
+                    <div class="label">With Solar</div>
+                    <div class="amount" id="solarBill">RM 80</div>
+                    <div class="unit">per month</div>
+                </div>
+            </div>
+
+            <div class="range-wrap">
+                <input type="range" id="billSlider" min="100" max="2000" step="50" value="400">
+                <div class="range-labels">
+                    <span>RM 100</span>
+                    <span>RM 2,000</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Savings -->
+        <div class="savings-highlight">
+            <div class="save-label">You Could Save</div>
+            <div class="save-amount" id="saveAmount">RM 320</div>
+            <div class="save-note">every month · <span id="saveYear">RM 3,840</span> a year</div>
+        </div>
+
+        <!-- Info Cards -->
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="info-icon sun">☀️</div>
+                <div class="info-text">
+                    <h3>Your Roof = Power Plant</h3>
+                    <p>A typical home system generates enough to cover 60–90% of your usage. The rest still comes from TNB as backup.</p>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-icon money">💰</div>
+                <div class="info-text">
+                    <h3>Payback in 5–7 Years</h3>
+                    <p>After that, the electricity is basically free. Systems last 25+ years with minimal upkeep.</p>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-icon shield">🛡️</div>
+                <div class="info-text">
+                    <h3>Protection from Rate Hikes</h3>
+                    <p>TNB tariffs go up over time. Solar locks in a big chunk of your cost at today's price.</p>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-icon clock">⏱️</div>
+                <div class="info-text">
+                    <h3>We Handle Everything</h3>
+                    <p>Site check, design, TNB paperwork, installation, and after-sales. You just watch the bill drop.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta-section">
+            <a href="https://solarenergymy.com/#contact" class="cta-btn">Get Free Site Assessment</a>
+            <p class="cta-note">No pressure. No hidden fees. Just numbers that make sense.<br>Visit <a href="https://solarenergymy.com">solarenergymy.com</a></p>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+            <p>These figures are estimates based on typical system performance in Malaysia. Actual savings depend on roof size, shading, system size, and your energy usage pattern. We will give you exact numbers after a free site assessment. SEDA-registered contractor. Tier-1 panels & inverters only.</p>
+        </div>
+
+    </div>
+
+    <script>
+        const slider = document.getElementById('billSlider');
+        const currentBill = document.getElementById('currentBill');
+        const solarBill = document.getElementById('solarBill');
+        const saveAmount = document.getElementById('saveAmount');
+        const saveYear = document.getElementById('saveYear');
+
+        function updateSavings() {
+            const current = parseInt(slider.value);
+            // Conservative estimate: solar covers ~80% of bill on average
+            const solar = Math.round(current * 0.20);
+            const monthlySave = current - solar;
+            const yearlySave = monthlySave * 12;
+
+            currentBill.textContent = 'RM ' + current.toLocaleString();
+            solarBill.textContent = 'RM ' + solar.toLocaleString();
+            saveAmount.textContent = 'RM ' + monthlySave.toLocaleString();
+            saveYear.textContent = 'RM ' + yearlySave.toLocaleString();
+        }
+
+        slider.addEventListener('input', updateSavings);
+        updateSavings();
+    </script>
+
+</body>
+</html>
